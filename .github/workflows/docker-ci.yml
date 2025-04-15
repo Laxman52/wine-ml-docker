@@ -2,26 +2,25 @@ name: Build, Test, and Push Docker Image
 
 on:
   push:
-    branches: [ main ]  # Trigger workflow only when main branch is updated
+    branches: [ main ]
 
 jobs:
-  build-and-test:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Python 3.10
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.9
 
-    - name: Install Python dependencies
-      run: |
-        pip install --no-cache-dir pandas numpy scikit-learn matplotlib seaborn joblib
+    - name: Install dependencies
+      run: pip install pandas scikit-learn matplotlib seaborn joblib
 
-    - name: Run Python script (main.py)
+    - name: Run the ML script (test the pipeline)
       run: python main.py
 
     - name: Log in to Docker Hub
@@ -30,8 +29,8 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build Docker Image
+    - name: Build Docker image
       run: docker build -t ${{ secrets.DOCKER_USERNAME }}/wine-ml-app .
 
-    - name: Push Docker Image to Docker Hub
+    - name: Push Docker image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/wine-ml-app
