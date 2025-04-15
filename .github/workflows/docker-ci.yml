@@ -2,7 +2,7 @@ name: Build, Test, and Push Docker Image
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]  # Trigger workflow only when main branch is updated
 
 jobs:
   build-and-test:
@@ -12,16 +12,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Python
+    - name: Set up Python 3.10
       uses: actions/setup-python@v4
       with:
         python-version: 3.10
 
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
-        pip install pandas numpy scikit-learn matplotlib seaborn joblib
+        pip install --no-cache-dir pandas numpy scikit-learn matplotlib seaborn joblib
 
-    - name: Run Python script
+    - name: Run Python script (main.py)
       run: python main.py
 
     - name: Log in to Docker Hub
@@ -33,5 +33,5 @@ jobs:
     - name: Build Docker Image
       run: docker build -t ${{ secrets.DOCKER_USERNAME }}/wine-ml-app .
 
-    - name: Push Docker Image
+    - name: Push Docker Image to Docker Hub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/wine-ml-app
