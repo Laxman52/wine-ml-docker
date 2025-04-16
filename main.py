@@ -50,7 +50,7 @@ dt_model.fit(X_train, y_train)
 dt_predictions = dt_model.predict(X_test)
 print("\n🌳 Decision Tree Accuracy:", accuracy_score(y_test, dt_predictions))
 print(classification_report(y_test, dt_predictions))
-
+"""
 # KMeans Clustering (on scaled data)
 kmeans = KMeans(n_clusters=3, random_state=42)
 data['cluster'] = kmeans.fit_predict(X_scaled)
@@ -59,7 +59,7 @@ data['cluster'] = kmeans.fit_predict(X_scaled)
 sns.scatterplot(data=data, x='fixed acidity', y='citric acid', hue='cluster', palette='viridis')
 plt.title('K-Means Clustering of Wine Quality')
 plt.savefig("kmeans_plot.png")  # Save the plot as an image (better for Docker/CI/CD)
-
+"""
 # Save models
 joblib.dump(lr_model, 'lr_model.pkl')
 joblib.dump(dt_model, 'dt_model.pkl')
